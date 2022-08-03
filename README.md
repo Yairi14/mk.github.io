@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>漢字とタイプ</title>
+    <audio src ="C:\Users\USER1\Downloads\Rocking Chair - Unicorn Heads.mp3" autoplay loop></audio>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="typing.css" />
+    <audio src ="C:\Users\USER1\Downloads\猫の鳴き声1.mp3" id="missaudio"></audio>
+    <audio src ="C:\Users\USER1\Downloads\猫の鳴き声1.mp3" id="correctaudio"></audio>
+<script>
+    var wordlist = 
+    ["amenimomakezu",
+     "miyzawakenji",
+     "amenimomakezu雨にも負けず",
+     "kazenimomakezu風にも負けず",
+     "yukinimonatunoatusanimokakenu雪にも夏の暑さにも負けぬ",
+     "jyoubunakaradawomoti丈夫なからだを持ち",
+     "yokuhanaku欲は無く",
+     "kessiteikarazu決して怒らず",
+     "itumosizukaniwaratteiru何時も静かに笑っている",
+     "ichinichinigennmaiyonngouto一日に玄米四合と",
+     "misotosukoshinoyasaiwotabe",
+     "arayurukotowo",
+     "jibunnwokannjyouniirezuni",
+     "yokunikikisihakari",
+     "sositewasurezu",
+     "noharanomatunohayashinokageno",
+     "chiisanakayabukinokoyaniite",
+     "higashinibyoukinokodomoareba",
+     "ittekannbyousiteyari",
+     "nishinitukaretahahaareba",
+     "ittesonoinenotabawoseoi",
+     "minaminisinisounahitoareba",
+     "ittekowagaranakutemoiitoii",
+     "kitanikennkayakousogaareba",
+     "tumaranaikarayamerotoii",
+     "hiderinotokihanamidawonagasi",
+     "samusanonatuhaorooroaruki",
+     "minnnanidekunobo-toyobare",
+     "homeraremosezunikunimosarezu",
+     "souiumononi",
+     "watasihanaritai"
+    ];
+    var wordlistJapanese = 
+    ["雨にも負けず",
+     "宮沢賢治",
+     "雨にも負けず",
+     "風にも負けず",
+     "雪にも夏の暑さにも負けぬ",
+     "丈夫なからだを持ち",
+     "欲は無く",
+     "決して怒らず",
+     "何時も静かに笑っている",
+     "一日に玄米四合と",
+     "味噌と少しの野菜を食べ",
+     "あらゆる事を",
+     "自分を勘定に入れずに",
+     "良く見聞きし判り",
+     "そして忘れず",
+     "野原の松の林の影の",
+     "小さな萱葺きの小屋に居て",
+     "東に病気の子供あれば",
+     "行って看病してやり",
+     "西に疲れた母あれば",
+     "行ってその稲の束を背負い",
+     "南に死にそうな人あれば",
+     "行って怖がらなくても良いと言い",
+     "北に喧嘩や訴訟があれば",
+     "つまらないからやめろと言い",
+     "日照りのときは涙を流し",
+     "寒さの夏はオロオロ歩き",
+     "皆にデクノボーと呼ばれ",
+     "誉められもせず苦にもされず",
+     "そういう者に",
+     "私はなりたい"
+    ];
+    var time_limit = 300;
+    var readytime = 3;
+    var score;
+    var correct;
+    var mistake;
+    var char_num = 0;
+    var word_char;
+    var random;
+    var newline;
+    var replacewordlist = [];
+    function ready(){
+        readytime = 3;
+        scoredis.innerHTML="";
+        start_button.style.visibility ="hidden";
+        var readytimer = setInterval(function(){
+            count.innerHTML=readytime;
+            readytime--;
+            if(readytime < 0){
+               clearInterval(readytimer);
+                gameStart();
+            }
+        },1000);
+    }
+    function gameStart(){
+        score = 0.0;
+        mistake = 0;
+        correct = 0;
+        wordDisplay();
+        var time_remaining = time_limit;
+        var gametimer = setInterval(function(){
+            count.innerHTML="残り時間："+time_remaining;
+            time_remaining--;
+            if(time_remaining <= 0){
+            clearInterval(gametimer);
+                finish();
+            }
+        },1000);
+    }
+    function wordDisplay(){
+        replacewordlist[random] = wordlist[random].replace("<br>/g","");
+        newline = wordlist[].indexOf("<");
+        word.innerHTML = wordlist[];
+        japanese.innerHTML = wordlistJapanese[];
+        charInsort();
+    }
+    function charInsort(){
+        word_char = replacewordlist[].charAt(char_num);
+    }
+    function finish(){
+        score = ((correct*3) - mistake);
+        // Math.floor(Math.pow(correct,2) * Math.pow((correct/(correct+mistake)),5));
+        scoredis.innerHTML="スコア:"+score+"点"+"<hr>正タイプ数:"+correct+"<br>ミスタイプ数:"+mistake+"<br>正答率"+(correct/(correct+mistake)*100).toFixed(1)+"%";
+        count.innerHTML="";
+        word.innerHTML="";
+        japanese.innerHTML="";
+        start_button.style.visibility ="visible";
+        word_char=0;
+        random = 0;
+        char_num = 0;
+    }
+document.onkeydown = function(e) {
+    if(e.keyCode == 189){
+       keyStr = "-";
+       }else if(e.keyCode == 188){
+                keyStr = ","
+                }else{
+                    var keyStr = String.fromCharCode(e.keyCode);
+                    keyStr = keyStr.toLowerCase();
+    }
+    if(keyStr == word_char){
+        document.getElementById('missaudio').pause();
+        document.getElementById('missaudio').currentTime = 0;
+        document.getElementById('correctaudio').pause();
+        document.getElementById('correctaudio').currentTime = 0;
+        document.getElementById('correctaudio').play();
+        word.innerHTML="<span style='color: red;'>"+wordlist[random].substr(0,char_num+1)+"</span>"+wordlist[random].substr(char_num+1,wordlist[random].length);
+        char_num++;
+        if(newline == char_num){
+           char_num = char_num + 4;
+           }
+        correct++;
+        charInsort();
+       }else{
+           document.getElementById('missaudio').pause();
+           document.getElementById('missaudio').currentTime = 0;
+           document.getElementById('correctaudio').pause();
+           document.getElementById('correctaudio').currentTime = 0;
+           mistake++;
+           document.getElementById('missaudio').play();
+       }
+    if(char_num == wordlist[random].length){
+        char_num=0;
+        wordDisplay();
+       }
+};
+ 
+</script>
+</head>
+<body>
+    <div class="wrap">
+        <input type="button" 
+        id="start_button" 
+        value="開 始"
+        style="margin:5px;
+               font-size:30px;
+               width:200px;
+               height:70px;
+               background-color: rgb(245, 88, 119);
+               font-weight:900;
+               color:white;" 
+        onclick="ready()" 
+        style="text-align:center"
+        >
+        <div id="count"></div>
+        <h1><div id="japanese"></div></h1>
+        <h2><div id="word"></div></h2>
+        <div id="scoredis"></div>
+    </div>
+    
+</body>
+ 
+</html>
