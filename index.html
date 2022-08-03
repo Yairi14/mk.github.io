@@ -8,8 +8,7 @@
     <audio src ="C:\Users\USER1\Downloads\猫の鳴き声1.mp3" id="missaudio"></audio>
     <audio src ="C:\Users\USER1\Downloads\猫の鳴き声1.mp3" id="correctaudio"></audio>
 <script>
-    var wordlist = 
-    ["amenimomakezu","miyzawakenji","amenimomakezu","kazenimomakezu"]
+    var wordlist = ["amenimomakezu","miyzawakenji","amenimomakezu","kazenimomakezu"]
 //      "yukinimonatunoatusanimokakenu",
 //      "jyoubunakaradawomoti",
 //      "yokuhanaku",
@@ -37,8 +36,7 @@
 //      "homeraremosezunikunimosarezu",
 //      "souiumononi",
 //      "watasihanaritai"];
-    var wordlistJapanese = 
-    ["雨にも負けず","宮沢賢治","雨にも負けず","風にも負けず"]
+    var wordlistJapanese = ["雨にも負けず","宮沢賢治","雨にも負けず","風にも負けず"]
 //      "雪にも夏の暑さにも負けぬ",
 //      "丈夫なからだを持ち",
 //      "欲は無く",
@@ -75,7 +73,7 @@
     var word_char;
 //     var random;
     var newline;
-    var replacewordlist = [];
+    var replacewordlist;
     function ready(){
         readytime = 3;
         scoredis.innerHTML="";
@@ -105,14 +103,14 @@
         },1000);
     }
     function wordDisplay(){
-        replacewordlist[] = wordlist[].replace("<br>/g","");
-        newline = wordlist[].indexOf("<");
-        word.innerHTML = wordlist[];
-        japanese.innerHTML = wordlistJapanese[];
+        replacewordlist = wordlist.replace("<br>/g","");
+        newline = wordlist.indexOf("<");
+        word.innerHTML = wordlist;
+        japanese.innerHTML = wordlistJapanese;
         charInsort();
     }
     function charInsort(){
-        word_char = replacewordlist[].charAt(char_num);
+        word_char = replacewordlist.charAt(char_num);
     }
     function finish(){
         score = ((correct*3) - mistake);
@@ -141,7 +139,7 @@ document.onkeydown = function(e) {
         document.getElementById('correctaudio').pause();
         document.getElementById('correctaudio').currentTime = 0;
         document.getElementById('correctaudio').play();
-        word.innerHTML="<span style='color: red;'>"+wordlist[].substr(0,char_num+1)+"</span>"+wordlist[].substr(char_num+1,wordlist[].length);
+        word.innerHTML="<span style='color: red;'>"+wordlist.substr(0,char_num+1)+"</span>"+wordlist.substr(char_num+1,wordlist.length);
         char_num++;
         if(newline == char_num){
            char_num = char_num + 4;
@@ -156,7 +154,7 @@ document.onkeydown = function(e) {
            mistake++;
            document.getElementById('missaudio').play();
        }
-    if(char_num == wordlist[].length){
+    if(char_num == wordlist.length){
         char_num=0;
         wordDisplay();
        }
